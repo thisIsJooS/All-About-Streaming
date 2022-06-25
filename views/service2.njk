@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Document</title>
+  </head>
+  <body>
+    <h2 style="text-align: center">Auto Video Stream to Still Image</h2>
+
+    <video id="myvideo" width="400" height="300" style="border: 1px solid #ddd"></video>
+    <canvas id="mycanvas" width="160" height="140" style="border: 1px solid #ddd"></canvas>
+    <br/>
+
+    <input type="button" value="get video" onclick="{getvideo()}"/>
+    <input type="button" value="stop video" onclick="{stopvideo()}"/>
+    <input type="button" value="get pic" onclick="{takesnapshot()}"/>
+    <br/>
+    Take snapshot every
+    <input type="number" id="myinterval" value="3000"/> milliseconds
+    <input type="button" value="auto" onclick="{takeauto()}"/>
+
+    <script>
+      var myVideoStream = document.getElementById("myvideo"); // make it a global variable
+      var myStoredInterval = 0;
+
+      function getvideo() {
+        navigator.getMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+
+        navigator.getMedia({
+          video: true,
+          audio: false
+        }, function (stream) {
+          myVideoStream.srcObject = stream;
+          myVideoStream.play();
+        }, function (error) {
+          alert("webcam not working");
+        });
+      }
+
+      function stopvideo() {
+        stopBothVideoAndAudio(myVideoStream.srcObject)
+      }
+
+      // stop both mic and camera
+      function stopBothVideoAndAudio(stream) {
+        stream
+          .getTracks()
+          .forEach(function (track) {
+            track.stop();
+          });
+      }
+
+      // stop only camera
+      function stopVideoOnly(stream) {
+        stream
+          .getTracks()
+          .forEach(function (track) {
+            if (track.readyState == "live" && track.kind === "video") {
+              track.stop();
+            }
+          });
+      }
+
+      // stop only mic
+      function stopAudioOnly(stream) {
+        stream
+          .getTracks()
+          .forEach(function (track) {
+            if (track.readyState == "live" && track.kind === "audio") {
+              track.stop();
+            }
+          });
+      }
+
+      function takesnapshot() {
+        var myCanvasElement = document.getElementById("mycanvas");
+        var myCTX = myCanvasElement.getContext("2d");
+        myCTX.drawImage(myVideoStream, 0, 0, myCanvasElement.width, myCanvasElement.height);
+      }
+
+      function takeauto() {
+        takeSnapshot(); // get snapshot right away then wait and repeat
+        clearInterval(myStoredInterval);
+        myStoredInterval = setInterval(function () {
+          takeSnapshot();
+        }, document.getElementById("myinterval").value);
+      }
+    </script>
+  </body>
+</html>

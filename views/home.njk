@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Document</title>
+  </head>
+  <body>
+    <p>home 입니다.</p>
+    <br>
+    <label for="service">service number</label>
+    <input type="text" name="service" id="service">
+    <button id="submit">move</button>
+    <script>
+      document
+        .querySelector('#submit')
+        .addEventListener('click', function () {
+          const serviceNum = document
+            .querySelector('#service')
+            .value;
+          window.location.href = `http://127.0.0.1:8000?service=${serviceNum}`;
+        })
+    </script>
+  </body>
+</html>
