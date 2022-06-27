@@ -26,6 +26,7 @@
     "fluent-ffmpeg": "^2.1.2",
     "hls-server": "^1.5.0",
     "morgan": "^1.10.0",
+    "multiparty": "^4.2.3",
     "nunjucks": "^3.2.3"
   }
 }
