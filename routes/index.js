@@ -19,4 +19,10 @@ router.get("/s4/upload", indexController.s4_upload);
 
 router.post("/s4", indexController.s4_POST);
 
+router.get("/s5", indexController.s5_GET);
+
+router.get("/s5/upload", indexController.s5_upload);
+
+router.post("/s5", indexController.s5_POST);
+
 module.exports = router;
